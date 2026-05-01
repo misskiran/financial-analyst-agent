@@ -23,26 +23,26 @@ This agent leverages **LangGraph** to coordinate a multi-step financial analysis
 
 The agent moves through a defined set of "Nodes" in a specific order:
 
-### 1. 📡 Research Node
+### 1. Research Node
 - **News Search:** Calls Tavily to find the top 5 most relevant news headlines for the target ticker (e.g., "NVDA stock performance today").
 - **Price Fetch:** Uses yfinance to retrieve the current market price and the trailing P/E ratio.
 - **Timestamping:** Marks the exact time data was fetched to ensure fresh analysis.
 
-### 2. 🧠 Analysis Node
+### 2. Analysis Node
 - **Data Synthesis:** Consolidates news headlines and price metrics into a prompt.
 - **LLM Reasoning:** Gemini analyzes the news context against the price data.
 - **Recommendation:** Gemini outputs a JSON response containing a summary, sentiment (POSITIVE/NEGATIVE/NEUTRAL), and a suggested action (BUY/SELL/HOLD).
 
-### 3. ⏸️ Human-in-the-Loop (Interrupt)
+### 3. Human-in-the-Loop (Interrupt)
 - **Stale Data Check:** If more than 10 minutes (configurable) have passed since the data was fetched, the agent forces a loop back to the **Research Node** to prevent trading on old news.
 - **Approval Window:** The workflow pauses. The user must review the AI's summary and recommendation.
 - **Decision:** The user clicks "Approve" to proceed to execution or "Reject" to end the run.
 
-### 4. 🚀 Action Node
+### 4. Action Node
 - **Execution:** If approved, the agent calls the Alpaca API to place a **Market Order** in your paper trading account.
 - **Validation:** Captures the Order ID for tracking.
 
-### 5. ✅ Complete
+### 5. Complete
 - Finalizes the state and displays a summary of the entire run including news, price, sentiment, and trade status.
 
 ---
